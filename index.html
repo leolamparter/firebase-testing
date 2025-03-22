@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firestore Integration</title>
+    <script type="module">
+        // Import Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase config (replace with your own)
+        const firebaseConfig = {
+            apiKey: "AIzaSyClsnse44vK0tAFnQJckA5BuFlvh0bpGTo",
+            authDomain: "financeforwardmain.firebaseapp.com",
+            projectId: "financeforwardmain",
+            storageBucket: "financeforwardmain.firebasestorage.app",
+            messagingSenderId: "231522398265",
+            appId: "1:231522398265:web:9147a7e9f4ffa218b55de8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Function to Fetch Data
+        async function fetchData() {
+            const querySnapshot = await getDocs(collection(db, "users"));
+            const list = document.getElementById("dataList");
+            list.innerHTML = "";
+            querySnapshot.forEach(doc => {
+                let li = document.createElement("li");
+                li.textContent = JSON.stringify(doc.data());
+                list.appendChild(li);
+            });
+        }
+
+        // Function to Add Data
+        async function addData() {
+            await addDoc(collection(db, "users"), {
+                name: "John Doe",
+                age: 30,
+                city: "New York"
+            });
+            alert("Document Added!");
+        }
+
+        window.fetchData = fetchData;
+        window.addData = addData;
+    </script>
+</head>
+<body>
+
+    <h1>Firebase Firestore Data</h1>
+    <button onclick="fetchData()">Fetch Data</button>
+    <button onclick="addData()">Add Data</button>
+    <ul id="dataList"></ul>
+
+</body>
+</html>
